@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>HAND HUNT — Duck Hunt with your hand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+  <div id="wrap">
+    <!-- Main game canvas: logical 256x240 NES resolution, scaled up -->
+    <canvas id="game" width="256" height="240"></canvas>
+
+    <!-- Camera feed (hidden element, drawn as picture-in-picture on canvas) -->
+    <video id="cam" playsinline muted autoplay></video>
+
+    <!-- Title screen (DOM overlay: needs real buttons so camera/audio unlock) -->
+    <div id="startScreen">
+      <div class="card">
+        <div class="reticle" aria-hidden="true"><span class="reticleDot"></span></div>
+        <div class="overline">a duck hunt remake &middot; your hand is the gun</div>
+        <h1 class="title">HAND HUNT</h1>
+
+        <div class="modes">
+          <button class="menuBtn" id="btnA">
+            <span class="modeName">Game A</span>
+            <span class="modeHint">one duck</span>
+          </button>
+          <button class="menuBtn" id="btnB">
+            <span class="modeName">Game B</span>
+            <span class="modeHint">two ducks</span>
+          </button>
+        </div>
+
+        <div class="howto">
+          <div class="howRow"><span class="k">aim</span> point your index finger &mdash; move your hand to move the crosshair</div>
+          <div class="howRow"><span class="k">fire</span> curl your thumb down sharply, then release to re-arm</div>
+          <div class="howRow"><span class="k">tip</span> landscape mode &middot; one arm away &middot; good light</div>
+        </div>
+
+        <div id="statusLine">loading hand-tracking model&hellip;</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script type="module" src="js/hands.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
