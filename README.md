@@ -24,7 +24,8 @@ Tips: keep the phone ~one arm away, good lighting, one hand in frame.
 ## Features
 
 - Real-time 21-landmark hand tracking (MediaPipe HandLandmarker, GPU with CPU fallback)
-- Thumb-curl trigger with anti-ghost-shot safety: hysteresis, 2-frame confirmation, release-to-arm, grace period and cooldown
+- Precision thumb trigger using normalized 3D thumb geometry, smoothed trigger scoring, multi-frame confirmation, release-to-arm, grace period and cooldown
+- Stable-hand gating to reduce transient detections and accidental shots
 - Full Duck Hunt loop: rounds, 3 shots per wave, fly-away timer, falling ducks, score values by round, perfect-round bonus, game over
 - The dog: sniffs at round start, holds up your ducks, laughs when you miss
 - Live camera picture-in-picture with hand skeleton + FIRE indicator
