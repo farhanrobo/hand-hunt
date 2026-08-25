@@ -1,0 +1,230 @@
+/* HAND HUNT — minimal, calm title screen + pixel-perfect game canvas */
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #0b0e13;
+  --bg-soft: #10141c;
+  --ink: #e9edf2;
+  --ink-dim: #8b93a1;
+  --ink-faint: #565e6b;
+  --line: rgba(233, 237, 242, 0.10);
+  --accent: #ffd166;        /* warm amber — the only pop of color */
+  --accent-soft: rgba(255, 209, 102, 0.08);
+  --danger: #ff6b6b;
+  --font-pixel: 'Press Start 2P', monospace; /* in-game canvas only */
+  --font-body: 'Manrope', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  touch-action: none;
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+#wrap {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game {
+  /* scaled by JS to fit screen while keeping 256:240 ratio */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000;
+}
+
+#cam {
+  position: absolute;
+  width: 2px; height: 2px;
+  opacity: 0.01;
+  pointer-events: none;
+  left: -10px; top: -10px;
+}
+
+/* ---------- title screen ---------- */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  background:
+    radial-gradient(1100px 520px at 50% -10%, rgba(255, 209, 102, 0.06), transparent 60%),
+    radial-gradient(900px 600px at 50% 115%, rgba(84, 130, 255, 0.05), transparent 60%),
+    var(--bg);
+  transition: opacity .45s ease;
+}
+#startScreen.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+
+.card {
+  width: min(420px, 92vw);
+  padding: 44px 8px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* subtle animated crosshair mark */
+.reticle {
+  position: relative;
+  width: 46px; height: 46px;
+  border: 1px solid rgba(255, 209, 102, 0.55);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+  animation: breathe 3.2s ease-in-out infinite;
+}
+.reticle::before, .reticle::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 209, 102, 0.55);
+}
+.reticle::before { width: 1px; height: 12px; left: 50%; top: -18px; }
+.reticle::after  { width: 12px; height: 1px; top: 50%; left: -18px; }
+.reticleDot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1);    opacity: .85; }
+  50%      { transform: scale(1.08); opacity: 1;   }
+}
+
+.overline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: var(--font-body);
+  font-size: clamp(30px, 8vw, 46px);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow: 0 0 28px rgba(255, 209, 102, 0.18);
+  margin-bottom: 36px;
+}
+
+/* mode buttons */
+.modes {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 34px;
+}
+
+.menuBtn {
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .1s;
+}
+.menuBtn:hover {
+  border-color: rgba(255, 209, 102, 0.45);
+  background: var(--accent-soft);
+}
+.menuBtn:active { transform: scale(0.985); }
+.menuBtn:disabled { opacity: .4; cursor: wait; }
+
+.modeName {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.modeHint {
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+}
+
+/* how to play */
+.howto {
+  width: 100%;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+.howRow {
+  display: flex;
+  gap: 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+}
+.howRow .k {
+  flex: 0 0 40px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-size: 11px;
+  padding-top: 2px;
+}
+
+#statusLine {
+  margin-top: 26px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--ink-faint);
+  min-height: 1.4em;
+  transition: color .3s;
+}
+#statusLine.err { color: var(--danger); }
+
+/* staggered entrance */
+.card > * { animation: rise .55s ease both; }
+.card > *:nth-child(1) { animation-delay: .05s; }
+.card > *:nth-child(2) { animation-delay: .12s; }
+.card > *:nth-child(3) { animation-delay: .19s; }
+.card > *:nth-child(4) { animation-delay: .28s; }
+.card > *:nth-child(5) { animation-delay: .38s; }
+.card > *:nth-child(6) { animation-delay: .48s; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* short screens (landscape phones): compress, keep everything visible */
+@media (max-height: 540px) {
+  .card { padding: 18px 8px; }
+  .reticle { width: 34px; height: 34px; margin-bottom: 14px; }
+  .reticle::before { top: -13px; height: 8px; }
+  .reticle::after { left: -13px; width: 8px; }
+  .title { margin-bottom: 18px; }
+  .modes { margin-bottom: 18px; }
+  .menuBtn { padding: 12px 18px; }
+  #statusLine { margin-top: 14px; }
+  .card > * { animation-duration: .3s; }
+}
